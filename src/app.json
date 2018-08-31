@@ -1,8 +1,8 @@
 {
   "pages": [
-    
     "pages/index/main",
-    "pages/logs/main",
+    "pages/detail/main",
+    "pages/search/main",
     "pages/screen/main"
   ],
   "window": {
@@ -20,7 +20,7 @@
         "iconPath":"/static/image/all（1）.png",
         "selectedIconPath": "/static/image/all.png"
     }, {
-        "pagePath": "pages/logs/main",
+        "pagePath": "pages/search/main",
         "text": "日志",
         "iconPath": "/static/image/1.png",
         "selectedIconPath": "/static/image/2.png"

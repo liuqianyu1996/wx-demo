@@ -1,10 +1,16 @@
 <template>
   <div>
-    <ul class="container log-list">
-      <li v-for="(log, index) in logs" :class="{ red: aa }" :key="index" class="log-item">
-        <card :text="(index + 1) + ' . ' + log"></card>
-      </li>
-    </ul>
+   <van-search
+    :value="value"
+    placeholder="请输入搜索内容"
+    show-action="true"
+    @search="onSearch"
+    @cancel="onCancel"
+    data-key="value"
+    use-action-slot="true"
+  >
+    <view slot="action" @click="onSearch">搜索</view>
+  </van-search>
   </div>
 </template>
 
@@ -19,7 +25,13 @@ export default {
 
   data () {
     return {
-      logs: []
+     value: ''
+    }
+  },
+
+  methods: {
+    onSearch(event) {
+      console.log('000',event.detail)
     }
   },
 

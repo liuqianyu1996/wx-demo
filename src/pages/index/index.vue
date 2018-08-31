@@ -2,21 +2,27 @@
   <div class="container">
     <swiper indicator-dots="true"
     autoplay="true" interval="2000" duration="500">
-    <swiper-item v-for="(item, index) in movies.subjects" :key="index" v-if="index < 5">
+    <swiper-item v-for="(item, index) in movies[0].move" :key="index" v-if="movies.length > 0 && index < 5">
         <image :src="item.images.large" mode="aspectFill"/>
     </swiper-item>
   </swiper>
-  <view style="text-align:center" class="move-slogan">
-      <text class="move-title">{{movies.title}}</text>
-  </view>
-  <scroll-view class="scroll-view_H" scroll-x style="width: 100%">
-    <view class="move-list">
-        <view v-for="(item, index) in movies.subjects" :key="index" class="move-item" @click="bindDetail(item.id)">
-          <image :src="item.images.large"/>
-          <text>{{item.title}}</text>
-        </view> 
+  <block v-for="(move, i) in movies" :key="i">
+    <view style="text-align:center" class="move-slogan">
+        <text class="move-title">{{move.title}}</text>
     </view>
-  </scroll-view>
+    <scroll-view class="scroll-view_H" scroll-x style="width: 100%">
+      <view class="move-list">
+       <view v-for="(item, index) in move.move" :key="index" 
+        class="move-item"
+        v-if="movies.length > 0">
+           <a :href="'/pages/detail/main?id=' + item.id">
+            <image :src="item.images.large"/>
+            <text>{{item.title}}</text>
+          </a>
+        </view>
+      </view>
+    </scroll-view>
+  </block>
   </div>
 </template>
 
@@ -34,21 +40,28 @@ export default {
     movies () {
       return store.state.movies
     },
+    loaded () {
+      return store.state.loaded
+    },
+  },
+  watch: {
+     movies (val) {
+      this.movies = val
+    },
   },
   components: {
-    card
   },
 
   methods: {
-    bindDetail() {
-
+    bindDetail(id) {
+      wx.navigateTo({ url: `../../pages/detail/main?id=${id}` })
     }
   },
-  onLoad() {
-     store.dispatch('getMovies')
+  onLoad () {
+    store.dispatch('getMovies')
   },
   created () {
- 
+    store.dispatch('getMovies')
   }
 }
 </script>
@@ -63,7 +76,6 @@ page {
 .container {
   padding: 0;
   height: 100%;
-  background: red;
 }
 swiper {
   width: 100%;
@@ -98,8 +110,8 @@ swiper-item image{
   background: #fff
 }
 .move-item image {
-  width: 240rpx;
-  height: 300rpx;
+  width: 230rpx;
+  height: 260rpx;
 }
 .move-item text {
   display: block;

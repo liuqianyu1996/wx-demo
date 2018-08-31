@@ -3,26 +3,45 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { fetchGet } from '@/utils/api'
+import { resolve } from 'url';
+import { rejects } from 'assert';
 
 Vue.use(Vuex)
 
+const moviesPath =  [
+  { key: 'in_theaters' },
+  { key: 'coming_soon' },
+  { key: 'new_movies' },
+  { key: 'top250' }
+]
+
 const store = new Vuex.Store({
   state: {
-    movies: []
+    movies: [],
+    loaded: false
   },
   mutations: {
     setMovies: (state, val) => {
         state.movies = val;
+    },
+    setLoaded: (state, val) => {
+      state.loaded = val;
     }
   },
   actions: {
-      getMovies: ({ commit }, param) => {
-        wx.showLoading({
-            title: '数据加载中'
+      getMovies: ({ commit }) => {
+        wx.showLoading({ title: '数据加载中' })
+        const tasks = moviesPath.map( path => {
+          return fetchGet(path.key).then(res => {
+            res.title = res.data.title;
+            res.move = res.data.subjects;
+            return res;
+          })
         })
-        fetchGet('/in_theaters').then(res => {
-            console.log(res.data);
-            commit('setMovies', res.data)
+        Promise.all(tasks).then(res => {
+            console.log(res);
+            commit('setMovies', res)
+            commit('setLoaded', true)
             wx.hideLoading()
         })
       }
