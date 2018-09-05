@@ -1,29 +1,29 @@
 <template>
   <div>
-    <view class="move-container" v-if="loaded">
-      <view class="move-img">
-        <image :src="move.images.large" />
+    <view class="moveObj-container" v-if="loaded">
+      <view class="moveObj-img">
+        <image :src="moveObj.images.large" />
       </view>
-      <view class="move-berif">
+      <view class="moveObj-berif">
         <view>
-          年份：<text>{{move.year}}</text>
+          年份：<text>{{moveObj.year}}</text>
         </view>
-        <text>影片名称：{{move.title}}</text>
+        <text>影片名称：{{moveObj.title}}</text>
         <view>
-          影片类型：<text v-for="(item, index) in move.genres" :key="index">{{item}} </text>
+          影片类型：<text v-for="(item, index) in moveObj.genres" :key="index">{{item}} </text>
         </view>
-        <text>影片简介：{{move.summary}}</text>
+        <text>影片简介：{{moveObj.summary}}</text>
       </view>
     </view>
     <view>
-      <view class="move-title" v-if="loaded">影人简介</view>
-      <view class="move-list">
-        <view v-for="(item, index) in move.casts" :key="index" class="move-item">
+      <view class="moveObj-title">演员简介</view>
+      <view class="moveObj-list">
+        <view v-for="(item, index) in moveObj.casts" :key="index" class="moveObj-item">
           <image :src="item.avatars.large" />
           <text>主演-{{item.name}}</text>
         </view>
       </view>
-  </view>
+    </view>
   </div>
 </template>
 
@@ -34,28 +34,38 @@ import { fetchGetData } from '@/utils/api'
 export default {
   components: {
   },
-
+  // created() {
+  //   this.moveObj = []
+  // },
   data () {
     return {
-      move: [],
+      moveObj: {},
       loaded: false
     }
   },
-
-  onLoad (query) {
-    console.log(query)
+  onLoad () {
     wx.showLoading({ title: '正在获取详情' })
-    fetchGetData(`subject/${query.id}`).then(res => {
-      console.log(res)
-      this.move = res.data;
+    console.log('this',this)
+    fetchGetData(`subject/${this.$root.$mp.query.id}`).then(res => {
+      this.moveObj = res.data;
+      console.log(this.moveObj.images.large);
       this.loaded = true;
       wx.hideLoading();
+      wx.setNavigationBarTitle({ title: `豆瓣电影 • ${res.data.title}` })
     })
   },
-
-  onHide() {
-    this.move = [];
-  }
+  onHide () {
+    this.moveObj = {}
+  },
+  // onLoad () {
+  //    wx.showLoading({ title: '正在获取详情' })
+  //   fetchGetData(`subject/${this.$root.$mp.query.id}`).then(res => {
+  //     this.moveObj = res.data;
+  //     console.log(this.moveObj);
+  //     wx.hideLoading();
+  //     wx.setNavigationBarTitle({ title: `豆瓣电影 • ${res.data.title}` })
+  //   })
+  // },
 }
 </script>
 
@@ -63,40 +73,39 @@ export default {
 page {
   font-size: 28rpx;
 }
-.move-container {
-}
-.move-img {
+.moveObj-img {
+  width: 100%;
   background-color: #ccc;
   height: 300px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.move-img image {
+.moveObj-img image {
   width: 50%;
 }
-.move-berif {
+.moveObj-berif {
   padding: 5px;
 }
-.move-list {
+.moveObj-list {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
 }
-.move-title {
+.moveObj-title {
   font-size: 32rpx;
   text-align: center;
 }
-.move-item {
+.moveObj-item {
   padding: 10rpx;
   width: 30%;
   text-align: center;
 }
-.move-item image {
+.moveObj-item image {
   width: 100%;
   height: 300rpx;
 }
-.move-item text {
+.moveObj-item text {
   display: block;
   width: 100%;
   height: 50rpx;

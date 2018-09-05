@@ -27,7 +27,6 @@
 </template>
 
 <script>
-import card from '@/components/card'
 import store from './store'
 
 export default {
@@ -53,15 +52,15 @@ export default {
   },
 
   methods: {
-    bindDetail(id) {
-      wx.navigateTo({ url: `../../pages/detail/main?id=${id}` })
-    }
+    // bindDetail(id) {
+    //   wx.navigateTo({ url: `../../pages/detail/main?id=${id}` })
+    // }
   },
   onLoad () {
     store.dispatch('getMovies')
   },
   created () {
-    store.dispatch('getMovies')
+    //store.dispatch('getMovies')
   }
 }
 </script>

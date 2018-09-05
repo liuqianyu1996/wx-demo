@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "搜索",
+  "navigationBarTitleText": "我的",
   "onReachBottomDistance": 50,
   "usingComponents": {  
     "van-search": "/dist/search/index",

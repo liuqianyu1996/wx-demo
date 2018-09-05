@@ -1,55 +1,70 @@
 <template>
   <div>
-   <van-search
-    :value="value"
-    placeholder="请输入搜索内容"
-    show-action="true"
-    @search="onSearch"
-    @cancel="onCancel"
-    data-key="value"
-    use-action-slot="true"
-  >
-    <view slot="action" @click="onSearch">搜索</view>
-  </van-search>
+    <van-search
+      :value="value"
+      placeholder="请输入搜索内容"
+      show-action="true"
+      @search="onSearch"
+      @cancel="onCancel"
+      data-key="value"
+      use-action-slot="true"
+    >
+      <view slot="action" @click="onSearch">搜索</view>
+    </van-search>
+    <view v-for="(item, index) in searchVal" :key="index">{{item.id}}
+      <navigator :url="'/pages/detail/main?id=' + item.id" class="move-item" :key="item.id">
+        <move-item :move="searchVal" v-if="searchVal.length > 0" ></move-item>
+      </navigator>
+    </view>
+    <van-loading v-if="loading"/>
   </div>
 </template>
-
 <script>
 import { formatTime } from '@/utils/index'
-import card from '@/components/card'
+import moveItem from '@/components/moveItem'
+import { fetchGet } from '@/utils/api'
 
 export default {
   components: {
-    card
+    moveItem
   },
 
   data () {
     return {
-     value: ''
+      value: '',
+      searchVal: [],
+      loading: false,
+      pageOpt: {
+        page: 1,
+        pageSize: 10
+      }
     }
   },
-
   methods: {
+    loadMovies(search) {
+      this.loading = true;
+      fetchGet('/search', this.pageOpt.page++, this.pageOpt.pageSize, search).then(res => {
+        this.searchVal = this.searchVal.concat(res.data.subjects);
+        console.log(this.loading)
+        console.log('search', this.searchVal)
+        this.loading = false;
+        console.log(this.loading)
+      })
+    },
     onSearch(event) {
-      console.log('000',event.detail)
+      if (!event.target.value) return false;
+      this.value = event.target.value;
+      this.searchVal = [];
+      this.loadMovies(event.target.value)
     }
   },
-
-  created () {
-    const logs = (wx.getStorageSync('logs') || [])
-    this.logs = logs.map(log => formatTime(new Date(log)))
+  onReachBottom() {
+    console.log('chufa bottom')
+    this.loadMovies(this.value)
   }
 }
 </script>
 
 <style>
-.log-list {
-  display: flex;
-  flex-direction: column;
-  padding: 40rpx;
-}
 
-.log-item {
-  margin: 10rpx;
-}
 </style>

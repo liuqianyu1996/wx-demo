@@ -1,8 +1,9 @@
 {
   "pages": [
     "pages/index/main",
-    "pages/detail/main",
     "pages/search/main",
+    "pages/detail/main",
+    "pages/user/main",
     "pages/screen/main"
   ],
   "window": {
@@ -21,9 +22,20 @@
         "selectedIconPath": "/static/image/all.png"
     }, {
         "pagePath": "pages/search/main",
-        "text": "日志",
-        "iconPath": "/static/image/1.png",
-        "selectedIconPath": "/static/image/2.png"
+        "text": "搜索",
+        "iconPath": "/static/image/search.png",
+        "selectedIconPath": "/static/image/search (1).png"
+    }, {
+      "pagePath": "pages/user/main",
+      "text": "我的",
+      "iconPath": "/static/image/1.png",
+      "selectedIconPath": "/static/image/2.png"
     }
-  ]}
+  ]},
+  "plugns": {
+    "hello-plugin": {
+      "version": "dev",
+      "provider": "wx899273158b039d2d"
+    }
+  }
 } 
